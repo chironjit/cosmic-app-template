@@ -10,6 +10,7 @@ use cosmic::widget::{self, icon, menu, nav_bar};
 use cosmic::{cosmic_theme, theme, Application, ApplicationExt, Apply, Element};
 use futures_util::SinkExt;
 use std::collections::HashMap;
+use crate::pages;
 
 const REPOSITORY: &str = "https://github.com/pop-os/cosmic-app-template";
 const APP_ICON: &[u8] = include_bytes!("../res/icons/hicolor/scalable/apps/icon.svg");
@@ -36,6 +37,18 @@ pub enum Message {
     SubscriptionChannel,
     ToggleContextPage(ContextPage),
     UpdateConfig(Config),
+}
+
+impl AppModel {
+    fn default_view(&self) -> Element<Message> {
+        widget::text::title1(fl!("welcome"))
+            .apply(widget::container)
+            .width(Length::Fill)
+            .height(Length::Fill)
+            .align_x(Horizontal::Center)
+            .align_y(Vertical::Center)
+            .into()
+    }
 }
 
 /// Create a COSMIC application from the app model
@@ -66,20 +79,89 @@ impl Application for AppModel {
         let mut nav = nav_bar::Model::default();
 
         nav.insert()
-            .text(fl!("page-id", num = 1))
+            .text(fl!("page-id", widget = "Text"))
             .data::<Page>(Page::Page1)
-            .icon(icon::from_name("applications-science-symbolic"))
-            .activate();
+            .icon(icon::from_name("applications-science-symbolic"));
 
         nav.insert()
-            .text(fl!("page-id", num = 2))
+            .text(fl!("page-id", widget = "Container, Column, Row"))
             .data::<Page>(Page::Page2)
             .icon(icon::from_name("applications-system-symbolic"));
 
         nav.insert()
-            .text(fl!("page-id", num = 3))
+            .text(fl!("page-id", widget = "Buttons"))
             .data::<Page>(Page::Page3)
+            .icon(icon::from_name("applications-system-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Icon, Image, SVG"))
+            .data::<Page>(Page::Page4)
+            .icon(icon::from_name("applications-system-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Divider & Space"))
+            .data::<Page>(Page::Page5)
+            .icon(icon::from_name("applications-system-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Text Input"))
+            .data::<Page>(Page::Page6)
             .icon(icon::from_name("applications-games-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Toggler, Slider, Radio, Checkbox"))
+            .data::<Page>(Page::Page7)
+            .icon(icon::from_name("applications-science-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Dropdown"))
+            .data::<Page>(Page::Page8)
+            .icon(icon::from_name("applications-system-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Spin button"))
+            .data::<Page>(Page::Page9)
+            .icon(icon::from_name("applications-games-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Colour picker"))
+            .data::<Page>(Page::Page10)
+            .icon(icon::from_name("applications-science-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Flex row"))
+            .data::<Page>(Page::Page11)
+            .icon(icon::from_name("applications-system-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Grid"))
+            .data::<Page>(Page::Page12)
+            .icon(icon::from_name("applications-games-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Segmented buttons"))
+            .data::<Page>(Page::Page13)
+            .icon(icon::from_name("applications-science-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Tab Bar"))
+            .data::<Page>(Page::Page14)
+            .icon(icon::from_name("applications-system-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Segmented Controls"))
+            .data::<Page>(Page::Page15)
+            .icon(icon::from_name("applications-games-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Context Menu"))
+            .data::<Page>(Page::Page16)
+            .icon(icon::from_name("applications-science-symbolic"));
+
+        nav.insert()
+            .text(fl!("page-id", widget = "Pane Grid"))
+            .data::<Page>(Page::Page17)
+            .icon(icon::from_name("applications-system-symbolic"));
 
         // Construct the app model with the runtime's core.
         let mut app = AppModel {
@@ -146,14 +228,37 @@ impl Application for AppModel {
     /// Application events will be processed through the view. Any messages emitted by
     /// events received by widgets will be passed to the update method.
     fn view(&self) -> Element<Self::Message> {
-        widget::text::title1(fl!("welcome"))
-            .apply(widget::container)
-            .width(Length::Fill)
-            .height(Length::Fill)
-            .align_x(Horizontal::Center)
-            .align_y(Vertical::Center)
-            .into()
+        let id = self.nav.active();
+        match id {
+            id => {
+                if let Some(page) = self.nav.data::<Page>(id) {
+                    match page {
+                        Page::Page1 => pages::page1(),
+                        Page::Page2 => pages::page2(),
+                        Page::Page3 => pages::page3(),
+                        Page::Page4 => pages::page4(),
+                        Page::Page5 => pages::page5(),
+                        Page::Page6 => pages::page6(),
+                        Page::Page7 => pages::page7(),
+                        Page::Page8 => pages::page8(),
+                        Page::Page9 => pages::page9(),
+                        Page::Page10 => pages::page10(),
+                        Page::Page11 => pages::page11(),
+                        Page::Page12 => pages::page12(),
+                        Page::Page13 => pages::page13(),
+                        Page::Page14 => pages::page14(),
+                        Page::Page15 => pages::page15(),
+                        Page::Page16 => pages::page16(),
+                        Page::Page17 => pages::page17(),
+                    }
+                } else {
+                    self.default_view()
+                }
+            }
+        }
     }
+
+    
 
     /// Register subscriptions for this application.
     ///
@@ -271,6 +376,20 @@ pub enum Page {
     Page1,
     Page2,
     Page3,
+    Page4,
+    Page5,
+    Page6,
+    Page7,
+    Page8,
+    Page9,
+    Page10,
+    Page11,
+    Page12,
+    Page13,
+    Page14,
+    Page15,
+    Page16,
+    Page17,
 }
 
 /// The context page to display in the context drawer.
