@@ -4,6 +4,8 @@ use cosmic::iced::Length;
 use cosmic::iced::widget::{pick_list, image};
 use cosmic::widget::{icon, button, text};
 use cosmic::widget::container;
+use cosmic::iced::alignment::{Horizontal, Vertical};
+use cosmic::iced::Alignment;
 
 
 pub fn page1<'a>() -> Element<'a, Message> {
@@ -220,40 +222,51 @@ pub fn page8<'a>() -> Element<'a, Message> {
 
 
 pub fn page9<'a>() -> Element<'a, Message> {
+    let minus_button = button::standard("-")
+        .on_press(Message::SubscriptionChannel)
+        .width(Length::Fixed(32.0));
+
+    let plus_button = button::standard("+") 
+        .on_press(Message::SubscriptionChannel)
+        .width(Length::Fixed(32.0));
+
+    let value_display = container(text("50"))
+        .width(Length::Fixed(64.0))
+        .align_x(Horizontal::Center);
+
+    let spin_buttons = widget::container(
+        widget::row::with_children(vec![
+            minus_button.into(),
+            value_display.into(),
+            plus_button.into()
+        ])
+        .spacing(4)
+        .align_y(Alignment::Center)
+    )
+    .padding(10)
+    .style(|theme: &Theme| {
+        let cosmic = theme.cosmic();
+        container::Style {
+            text_color: Some(cosmic.accent.base.into()),
+            icon_color: Some(cosmic.accent.base.into()),
+            background: Some(Color { r: 0.2, g: 0.3, b: 0.8, a: 0.1 }.into()),
+            border: iced::Border {
+                radius: cosmic.corner_radii.radius_m.into(),
+                width: 1.0,
+                color: cosmic.accent.base.into(),
+            },
+            ..Default::default()
+        }
+    });
+
     widget::column()
         .push(widget::text::title2("Spin Button"))
-        .push(
-            widget::container(
-                widget::spin_button(
-                    "Value",
-                    50,
-                    1,
-                    0,
-                    100,
-                    |_| Message::SubscriptionChannel
-                )
-            )
-            .padding(10)
-            .style(|theme: &Theme| {
-                let cosmic = theme.cosmic();
-                container::Style {
-                    text_color: Some(cosmic.accent.base.into()),
-                    icon_color: Some(cosmic.accent.base.into()),
-                    background: Some(Color { r: 0.2, g: 0.3, b: 0.8, a: 0.1 }.into()),
-                    border: iced::Border {
-                        radius: cosmic.corner_radii.radius_m.into(),
-                        width: 1.0,
-                        color: cosmic.accent.base.into(),
-                    },
-                    ..Default::default()
-                }
-            })
-        )
+        .push(spin_buttons)
         .spacing(20)
         .padding(20)
         .width(Length::Fill)
         .into()
- }
+}
 
 pub fn page10<'a>() -> Element<'a, Message> {
     widget::column()

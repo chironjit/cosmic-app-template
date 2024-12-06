@@ -2,6 +2,9 @@
 
 A template for developing applications for the COSMIC™ desktop environment.
 
+## Note
+This is a copy of the libcosmic template with examples of some of the widgets available baked in. Please note that colour scheme may conflict in non-libcosmic DEs.
+
 ## Getting Started
 
 Log into your GitHub account and click the "Use this template" button above. This will create a new repository in your account. Choose a name for this repository, and then clone it locally onto your system. Make the following changes after cloning it:
